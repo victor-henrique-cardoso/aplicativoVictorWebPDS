@@ -14,11 +14,10 @@
         <tr>
             <th>Id</th>
             <th>Número</th>
-            <th>Data</th>
             <th>Interessado</th>
             <th>Assunto</th>
-            <th>Descrição</th>
             <th>Situação</th>
+            <th>Ações</th>
         </tr>
     </thead>
 
@@ -27,12 +26,24 @@
         {
             <tr>
                 <td>@processo.Id</td>
+
                 <td>@processo.Numero</td>
-                <td>@processo.Data?.ToString("dd/MM/yyyy")</td>
+
                 <td>@processo.Interessado</td>
+
                 <td>@processo.Assunto</td>
-                <td>@processo.Descricao</td>
+
                 <td>@processo.Situacao</td>
+
+                <td>
+                    <button class="btn btn-primary btn-sm">
+                        Editar
+                    </button>
+
+                    <button class="btn btn-danger btn-sm ms-2">
+                        Excluir
+                    </button>
+                </td>
             </tr>
         }
     </tbody>

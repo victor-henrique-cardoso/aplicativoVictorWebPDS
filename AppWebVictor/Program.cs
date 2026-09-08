@@ -1,27 +1,54 @@
 using AppWebVictor.Components;
+using AppWebVictor.Configs;
+using AppWebVictor.DAO;
 
-var builder = WebApplication.CreateBuilder(args);
-
-// Add services to the container.
-builder.Services.AddRazorComponents()
-    .AddInteractiveServerComponents();
-
-var app = builder.Build();
-
-// Configure the HTTP request pipeline.
-if (!app.Environment.IsDevelopment())
+public partial class Program
 {
-    app.UseExceptionHandler("/Error", createScopeForErrors: true);
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-    app.UseHsts();
+    private static void Main(string[] args)
+    {
+        var builder = WebApplication.CreateBuilder(args);
+
+        // Adiciona os serviços do Blazor
+        builder.Services.AddRazorComponents()
+            .AddInteractiveServerComponents();
+
+        // Registra a conexão com o banco de dados
+        builder.Services.AddScoped<Conexao>();
+
+        // Registra o DAO de Processo
+        builder.Services.AddScoped<ProcessoDAO>();
+
+        var app = builder.Build();
+
+        // Configura o pipeline HTTP
+        if (!app.Environment.IsDevelopment())
+        {
+            app.UseExceptionHandler(
+                "/Error",
+                createScopeForErrors: true
+            );
+
+            // HSTS - segurança para HTTPS
+            app.UseHsts();
+        }
+
+        app.UseStatusCodePagesWithReExecute(
+            "/not-found",
+            createScopeForStatusCodePages: true
+        );
+
+        // Redireciona HTTP para HTTPS
+        app.UseHttpsRedirection();
+
+        app.UseAntiforgery();
+
+        // Arquivos estáticos
+        app.MapStaticAssets();
+
+        // Configuração dos componentes Razor
+        app.MapRazorComponents<App>()
+            .AddInteractiveServerRenderMode();
+
+        app.Run();
+    }
 }
-app.UseStatusCodePagesWithReExecute("/not-found", createScopeForStatusCodePages: true);
-app.UseHttpsRedirection();
-
-app.UseAntiforgery();
-
-app.MapStaticAssets();
-app.MapRazorComponents<App>()
-    .AddInteractiveServerRenderMode();
-
-app.Run();

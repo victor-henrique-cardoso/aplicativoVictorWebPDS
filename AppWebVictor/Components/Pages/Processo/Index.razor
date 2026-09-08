@@ -1,0 +1,48 @@
+﻿@page "/processos"
+
+@using AppWebVictor.Model
+@using AppWebVictor.DAO
+
+@inject ProcessoDAO ProcessoDAO
+
+<PageTitle>Processos</PageTitle>
+
+<h2>Consulta de Processos</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Número</th>
+            <th>Data</th>
+            <th>Interessado</th>
+            <th>Assunto</th>
+            <th>Descrição</th>
+            <th>Situação</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var processo in processos)
+        {
+            <tr>
+                <td>@processo.Id</td>
+                <td>@processo.Numero</td>
+                <td>@processo.Data?.ToString("dd/MM/yyyy")</td>
+                <td>@processo.Interessado</td>
+                <td>@processo.Assunto</td>
+                <td>@processo.Descricao</td>
+                <td>@processo.Situacao</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@code {
+    private List<Processo> processos = new();
+
+    protected override void OnInitialized()
+    {
+        processos = ProcessoDAO.Listar();
+    }
+}
